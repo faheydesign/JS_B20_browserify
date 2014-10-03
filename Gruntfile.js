@@ -1,13 +1,15 @@
+// add test mocha
+
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     clean: ['dist/'],
     browserify: {
-      'dist/js/bundle.js': ['js/main.js']
+        './app/js/package.js' : [ './app/js/main.js' ]
     },
     jshint: {
       // define the files to lint
-      files: ['Gruntfile.js', 'app/scripts/*.js', 'test/**/*.js', '*.js'],
+      files: ['Gruntfile.js', 'app/js/*.js', 'test/**/*.js', '!app/js/package.js'],
       // configure JSHint (documented at http://www.jshint.com/docs/)
       options: {
         // more options here if you want to override JSHint defaults
@@ -21,7 +23,10 @@ module.exports = function(grunt) {
     },
     watch: {
       files: ['<%= jshint.files %>'],
-      tasks: ['jshint']
+      tasks: ['jshint', 'browserify'],
+      options: {
+      livereload: true,
+      }
     }
   });
 
@@ -33,5 +38,5 @@ module.exports = function(grunt) {
 
 
   grunt.registerTask('default', ['jshint', 'browserify']);
-  grunt.registerTask('build', ['jshint', 'clean', 'browserify', ]);
+  grunt.registerTask('prod', ['jshint', 'clean', 'browserify' ]);
 };
